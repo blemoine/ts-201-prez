@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+                    <h1>TypeScript</h1>
+                    <h2>Best practices</h2>
+                    Faites du compilateur votre meilleur ami
+                    IMG de TS
+				</section>
+				
+				<section>
+                    <h2>Qui suis je?</h2>
+                    // TODO copie/paste from date prez
+				</section>
+				
+				<section>
+                    <h2>Ce dont on ne vas <strong>pas</strong> parler</h2>
+                    Best practices en JS
+				</section>
+				
+				<section>
+                    <h2>Best practices specifique a TS</h2>
+                    Double goal:
+                      - avoir le compilateur qui aide a maintenir le code
+                      - avoir le compilateur qui aide a ecrire le code
+				</section>
+				
+				
+				<section>
+                    <h2>Règles de base</h2>
+                    <ul>
+                      <li class="fragment">le compilateur a raison, <em>vous</em> avez tort&nbsp;!</li>
+                      <li class="fragment">Ne mentez pas au compilateur&nbsp;! (ie. pas de cast, pas de conversion sans validation)</li>
+                    </ul>
+				</section>
+				
+				
+				<section>
+                    <h2>Aidez TypeScript à vous aider</h2>
+                    <h3>tsconfig.json</h3>
+                    TODO example bidon ?
+				</section>
+				
+				<section>
+                    <h2>lib</h2>
+                    
+                    <pre><code data-trim class="typescript">
+async function sum(p: Promise&lt;number[][]>): Promise&lt;number> {
+    const arr = await p;
+    return arr.flat().reduce( (a,b) => a + b, 0);
+}                    
+                    </code></pre>
+                         <pre><code data-trim class="json">
+                    "target": "es2016", 
+                    "lib": ["es2016"] 
+                    </code></pre>
+                    
+                    <pre><code data-trim class="json">
+                     Property 'flat' does not exist on type 'number[][]'. 
+                     Do you need to change your target library? 
+                     Try changing the 'lib' compiler option to 'es2019' or later.
+                    </code></pre>
+               
+               
+				</section>
+
+					<section>
+                    <h2>lib</h2>
+                    
+                    <pre><code data-trim class="typescript">
+async function sum(p: Promise&lt;number[][]>): Promise&lt;number> {
+    const arr = await p;
+    return arr.flat().reduce( (a,b) => a + b, 0);
+}                    
+                    </code></pre>
+                         <pre><code data-trim class="json">
+                    "target": "es2016", 
+                    "lib": ["es2019"] 
+                    </code></pre>
+                    
+                    <pre><code data-trim class="json">
+function sum(p) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const arr = yield p;
+        return arr.flat().reduce((a, b) => a + b, 0);
+    });
+}
+</code></pre>
+               
+               
+				</section>
+				
+				<section>
+                    <h2>lib</h2>
+                    
+                    <pre><code data-trim class="typescript">
+async function sum(p: Promise&lt;number[][]>): Promise&lt;number> {
+    const arr = await p;
+    return arr.flat().reduce( (a,b) => a + b, 0);
+}                    
+                    </code></pre>
+                         <pre><code data-trim class="json">
+                    "target": "es2016", 
+                    "lib": ["es2019"] 
+                    </code></pre>
+                    
+                    <pre><code data-trim class="js">
+async function sum(p) {
+    const arr = await p;
+    return arr.flat().reduce((a, b) => a + b, 0);
+}
+
+</code></pre>
+               
+               
+				</section>
+				
+				<section>
+                    <h2>strictNullChecks</h2>
+                    
+                        <pre><code data-trim class="typescript">
+function length(p: string | null): number {
+    return p.length;
+}                    
+             </code></pre>
+                    
+                      <pre><code data-trim class="json">
+                    "strictNullChecks": "true"
+                    </code></pre>
+                    
+                     <pre><code data-trim class="js">
+error TS2531: Object is possibly 'null'.
+
+2     return p.length;
+             ~
+                     </code></pre>
+				</section>
+				
+				<section>
+                    <h2>noImplicitAny</h2>
+				</section>
+				
+				<section>
+                    <h2>strictFunctionTypes</h2>
+				</section>
+				
+				<section>
+                    <h2>strictPropertyInitialization</h2>
+				</section>
+				
+				<section>
+                    <h2>exactOptionalPropertyTypes</h2>
+				</section>
+				
+				<section>
+                    <h2>strict</h2>
+				</section>
+				
+				<section>
+				How can I configure that on ane xisting project not strict / using babel : with a 2nd tsconfig.json used as a linter.
+
+				</section>
+
+				
+				<section>
+				<h2>Model with precise type</h2>
+				Pitfall of structural typings
+				interface vs type. 
+				Explicite implementation.
+				Empty Object
+				
+				<section>
+				
+				<section>
+                    <h2>Don't use <code>any</code></h2>
+                    
+				</section>
+				
+				<section>
+                    <h2>Don't use optional</h2>
+                    Neither in type nor in function
+				</section>
+				
+				<section>
+				 
+   - use literal type
+
+   
+				</section>
+				
+				<section>
+Use union type ! 
+
+Discriminated union
+				</section>
+				
+				<section>
+				Use type guard
+				</section>
+				
+				<section>
+				never / cannotHappen
+				</section>
+				
+				<section>
+				Error handling -> exeption que pour les crashs, return value pour le reste
+				  -> GOTO glorifié
+				  -> tester les symboles ?
+				</section>
+				
+				<section>
+				Use generics when you can
+				(examples de equals , une seule implem possible)
+				
+				</section>
+				
+                <section>
+                        * use tag for configuration to differentiate type that are otherwise the same (ie phantom type not so phantomatic)
+                </section>
+                
+                <section>
+
+
+
+* use advanced type Optiinal, Omit, Readonly, `extends`, Mapped type                
+                </section>
+				
+				
+				<section>
+	
+
+
+
+
+
+
+
+
+Tuple + Named tuple [prout:string, age:number]
+
+				
+				
+				</section>
+				
+				<section>
+                    <h2>Conclusion</h2>
+                    
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
