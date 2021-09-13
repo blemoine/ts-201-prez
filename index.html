@@ -1,99 +1,143 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
-		<title>reveal.js</title>
+    <title>reveal.js</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+    <link rel="stylesheet" href="dist/reset.css"/>
+    <link rel="stylesheet" href="dist/reveal.css"/>
+    <link rel="stylesheet" href="dist/theme/black.css"/>
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>
-                    <h1>TypeScript</h1>
-                    <h2>Best practices</h2>
-                    Faites du compilateur votre meilleur ami
-                    IMG de TS
-				</section>
-				
-				<section>
-                    <h2>Qui suis je?</h2>
-                    // TODO copie/paste from date prez
-				</section>
-				
-				<section>
-                    <h2>Ce dont on ne vas <strong>pas</strong> parler</h2>
-                    Best practices en JS
-				</section>
-				
-				<section>
-                    <h2>Best practices specifique a TS</h2>
-                    Double goal:
-                      - avoir le compilateur qui aide a maintenir le code
-                      - avoir le compilateur qui aide a ecrire le code
-				</section>
-				
-				
-				<section>
-                    <h2>Règles de base</h2>
-                    <ul>
-                      <li class="fragment">le compilateur a raison, <em>vous</em> avez tort&nbsp;!</li>
-                      <li class="fragment">Ne mentez pas au compilateur&nbsp;! (ie. pas de cast, pas de conversion sans validation)</li>
-                    </ul>
-				</section>
-				
-				
-				<section>
-                    <h2>Aidez TypeScript à vous aider</h2>
-                    <h3>tsconfig.json</h3>
-                    TODO example bidon ?
-				</section>
-				
-				<section>
-                    <h2>lib</h2>
-                    
-                    <pre><code data-trim class="typescript">
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css"/>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>TypeScript</h1>
+            <h2>Best practices</h2>
+            Faites du compilateur votre meilleur ami IMG de TS
+        </section>
+
+        <section>
+            <h2>Qui suis je?</h2>
+            <ul
+                    style="
+              display: inline-block;
+              width: 600px;
+              vertical-align: top;
+              position: relative;
+            "
+            >
+                <li>Benoît Lemoine</li>
+                <li>
+                    Développeur Fullstack <br/>(TS, Scala, Rust, ...) <br/>
+                    aimant la programmation fonctionnelle <br/>chez
+                    <a href="http://www.decathlon.ca">Decathlon</a> à Montréal
+                </li>
+                <li>
+                    <a href="https://twitter.com/benoit_lemoine">@benoit_lemoine</a>
+                </li>
+            </ul>
+            <img
+                    style="display: inline-block; width: 250px; vertical-align: top"
+                    src="img/Moloch.png"
+                    title="Plus bel animal du monde, le Moloch"
+                    alt="un Moloch marchand dans le sable"
+            />
+        </section>
+
+        <section>
+            <h2>Ce dont on ne vas <strong>pas</strong> parler</h2>
+            <h3 class="fragment">Best practices en JavaScript</h3>
+            // TODO parler de linter
+        </section>
+
+        <section>
+            <h2>Objectif des pratiques données ci-après</h2>
+            <p>Le compilateur et les types doivent nous aider à</p>
+            <ul>
+                <li class="fragment">maintenir le code</li>
+                <li class="fragment">écrire le code</li>
+                <li class="fragment">communiquer notre intention aux autres developpeurs</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Règles de base</h2>
+            <ul>
+                <li class="fragment">
+                    le compilateur a raison, <em>vous</em> avez tort&nbsp;!
+                </li>
+                <li class="fragment">
+                    Ne mentez pas au compilateur&nbsp;! (ie. pas de cast, pas de
+                    conversion sans validation, etc.)
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Aidez TypeScript à vous aider</h2>
+            <h3>tsconfig.json</h3>
+            <pre><code data-trim class="json">
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "rootDir": "src",
+    "outDir": "dist",
+    "target": "ES2019",
+    "strict": true,
+    "lib": ["es2020.string", "ES2019"]
+  }
+}
+
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>lib</h2>
+
+            <pre><code data-trim class="typescript">
 async function sum(p: Promise&lt;number[][]>): Promise&lt;number> {
     const arr = await p;
     return arr.flat().reduce( (a,b) => a + b, 0);
 }                    
                     </code></pre>
-                         <pre><code data-trim class="json">
+            <pre><code data-trim class="json">
                     "target": "es2016", 
                     "lib": ["es2016"] 
                     </code></pre>
-                    
-                    <pre><code data-trim class="json">
+
+            <pre><code data-trim class="json">
                      Property 'flat' does not exist on type 'number[][]'. 
                      Do you need to change your target library? 
                      Try changing the 'lib' compiler option to 'es2019' or later.
                     </code></pre>
-               
-               
-				</section>
+        </section>
 
-					<section>
-                    <h2>lib</h2>
-                    
-                    <pre><code data-trim class="typescript">
+        <section>
+            <h2>lib</h2>
+
+            <pre><code data-trim class="typescript">
 async function sum(p: Promise&lt;number[][]>): Promise&lt;number> {
     const arr = await p;
     return arr.flat().reduce( (a,b) => a + b, 0);
 }                    
                     </code></pre>
-                         <pre><code data-trim class="json">
+            <pre><code data-trim class="json">
                     "target": "es2016", 
                     "lib": ["es2019"] 
                     </code></pre>
-                    
-                    <pre><code data-trim class="json">
+
+            <pre><code data-trim class="json">
 function sum(p) {
     return __awaiter(this, void 0, void 0, function* () {
         const arr = yield p;
@@ -101,183 +145,408 @@ function sum(p) {
     });
 }
 </code></pre>
-               
-               
-				</section>
-				
-				<section>
-                    <h2>lib</h2>
-                    
-                    <pre><code data-trim class="typescript">
+        </section>
+
+        <section>
+            <h2>lib</h2>
+
+            <pre><code data-trim class="typescript">
 async function sum(p: Promise&lt;number[][]>): Promise&lt;number> {
     const arr = await p;
     return arr.flat().reduce( (a,b) => a + b, 0);
 }                    
                     </code></pre>
-                         <pre><code data-trim class="json">
+            <pre><code data-trim class="json">
                     "target": "es2016", 
                     "lib": ["es2019"] 
                     </code></pre>
-                    
-                    <pre><code data-trim class="js">
+
+            <pre><code data-trim class="js">
 async function sum(p) {
     const arr = await p;
     return arr.flat().reduce((a, b) => a + b, 0);
 }
 
 </code></pre>
-               
-               
-				</section>
-				
-				<section>
-                    <h2>strictNullChecks</h2>
-                    
-                        <pre><code data-trim class="typescript">
-function length(p: string | null): number {
+        </section>
+
+        <section>
+            <h2>strictNullChecks</h2>
+
+            <pre><code data-trim class="typescript">
+function length(p: string): number {
     return p.length;
-}                    
+}
+length(null);
              </code></pre>
-                    
-                      <pre><code data-trim class="json">
+
+            <pre><code data-trim class="json">
                     "strictNullChecks": "true"
                     </code></pre>
-                    
-                     <pre><code data-trim class="js">
+
+            <pre><code data-trim class="js">
 error TS2531: Object is possibly 'null'.
 
-2     return p.length;
-             ~
+return p.length;
+       ~
                      </code></pre>
-				</section>
-				
-				<section>
-                    <h2>noImplicitAny</h2>
-				</section>
-				
-				<section>
-                    <h2>strictFunctionTypes</h2>
-				</section>
-				
-				<section>
-                    <h2>strictPropertyInitialization</h2>
-				</section>
-				
-				<section>
-                    <h2>exactOptionalPropertyTypes</h2>
-				</section>
-				
-				<section>
-                    <h2>strict</h2>
-				</section>
-				
-				<section>
-				How can I configure that on ane xisting project not strict / using babel : with a 2nd tsconfig.json used as a linter.
+        </section>
 
-				</section>
+        <section>
+            <h2>noImplicitAny</h2>
 
-				
-				<section>
-				<h2>Model with precise type</h2>
-				Pitfall of structural typings
-				interface vs type. 
-				Explicite implementation.
-				Empty Object
-				
-				<section>
-				
-				<section>
-                    <h2>Don't use <code>any</code></h2>
-                    
-				</section>
-				
-				<section>
-                    <h2>Don't use optional</h2>
-                    Neither in type nor in function
-				</section>
-				
-				<section>
-				 
-   - use literal type
+            <pre><code data-trim class="typescript">
+function trim(p): string {
+    return p.trim();
+}
+trim(42);
+             </code></pre>
 
-   
-				</section>
-				
-				<section>
-Use union type ! 
+            <pre><code data-trim class="json">
+                    "noImplicitAny": "true"
+                    </code></pre>
 
-Discriminated union
-				</section>
-				
-				<section>
-				Use type guard
-				</section>
-				
-				<section>
-				never / cannotHappen
-				</section>
-				
-				<section>
-				Error handling -> exeption que pour les crashs, return value pour le reste
-				  -> GOTO glorifié
-				  -> tester les symboles ?
-				</section>
-				
-				<section>
-				Use generics when you can
-				(examples de equals , une seule implem possible)
-				
-				</section>
-				
-                <section>
-                        * use tag for configuration to differentiate type that are otherwise the same (ie phantom type not so phantomatic)
-                </section>
-                
-                <section>
+            <pre><code data-trim class="js">
+error TS7006: Parameter 'p' implicitly has an 'any' type.
+
+function trim(p): number {
+              ~
+                     </code></pre>
+        </section>
+
+        <section>
+            <h2>strictFunctionTypes</h2>
+            // TODO ?
+        </section>
+
+        <section>
+            <h2>strictPropertyInitialization</h2>
+            // TODO ?
+        </section>
+
+        <section>
+            <h2>exactOptionalPropertyTypes</h2>
+            <pre><code data-trim class="typescript">
+interface Example {
+    optional?: string;
+    nullable: string | null;
+    undefinenable: string | undefined
+}
+
+const example: Example = {optional: undefined, nullable:null, undefinenable: undefined}
+             </code></pre>
+
+            <pre><code data-trim class="json">
+                    "exactOptionalPropertyTypes": "true"
+                    </code></pre>
+
+            <pre><code data-trim class="js">
+error TS2322: Type 'undefined' is not assignable to type 'string'.
+
+const example: Example = {optional: undefined, nullable:null, undefinenable: undefined}
+                ~
+                     </code></pre>
+        </section>
+
+        <section>
+            <h2>strict</h2>
+            <pre><code data-trim class="json">
+                    "strict": "true"
+                    </code></pre>
+        </section>
+
+        <section>
+            <h2>Changer la configuration d'un projet existant</h2>
+            <ul>
+                <li>
+                    Projet utilisant un compilateur sans typechecking (babel, swc,
+                    etc.)
+                </li>
+                <li>
+                    Projet existant avec de nombreux fichiers possiblement pleins
+                    d'erreurs
+                </li>
+            </ul>
+            <ul class="fragment">
+                <li>Créer un fichier tsconfig avec les règles stricts</li>
+                <li>Utiliser cette conf comme linter</li>
+                <li>
+                    Ajouter les fichiers un par un jusqu'a avoir couvert tout le
+                    projet
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Modeliser avec les types le plus précis possible</h2>
+        </section>
+
+        <section>
+            <h2>Type Structurel - interface vs type</h2>
+
+            <pre><code data-trim class="typescript">
+   interface User {
+    id: number;
+    name: string;
+  }
+
+  interface Admin extends User {
+    permissions: string[];
+  }
+  const user: User = { id: 1, name: "Georges" };
+  class SuperAdmin implements User {
+    constructor(public id: number, public name: string) {}
+  }
+                    </code></pre>
+        </section>
+
+        <section>
+            <h2>Type Structurel - interface vs type</h2>
+
+            <pre><code data-trim class="typescript">
+  type User = {
+    id: number;
+    name: string;
+  }
+
+  interface Admin extends User {
+    permissions: string[];
+  }
+  const user: User = { id: 1, name: "Georges" };
+  class SuperAdmin implements User {
+    constructor(public id: number, public name: string) {}
+  }
+                    </code></pre>
+        </section>
+
+        <section>
+            <h2>Type Structurel - sous typage</h2>
+            <pre><code data-trim class="typescript">
+type User = {
+    id: number;
+    name: string;
+};
+const user:User = {
+    id:1,
+    name: 'Georges',
+    age: 54
+                        // Type '{ id: number; name: string; age: number; }' is not assignable to type 'User'.
+                        // Object literal may only specify known properties, and 'age' does not exist in type 'User'.
+}
 
 
+                    </code></pre>
+        </section>
 
-* use advanced type Optiinal, Omit, Readonly, `extends`, Mapped type                
-                </section>
-				
-				
-				<section>
-	
-
-
-
-
-
+        <section>
+            <h2>Type Structurel - sous typage</h2>
+            <pre><code data-trim class="typescript">
+type User = {
+    id: number;
+    name: string;
+};
 
 
+const user2 = {
+    id:1,
+    name: 'Georges',
+    age: 54
+}
+const user:User = user2; 
+                    </code></pre>
+        </section>
 
-Tuple + Named tuple [prout:string, age:number]
+        <section>
+            <h2>Don't use <code>any</code></h2>
+            <pre><code data-trim class="typescript">
+const aNumber: any = 5;
+aNumber.trim();
 
-				
-				
-				</section>
-				
-				<section>
-                    <h2>Conclusion</h2>
-                    
-				</section>
-			</div>
-		</div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+            </code></pre>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+            <pre><code data-trim class="typescript">
+const aNumber: unknown = 5;
+aNumber.trim(); // Object is of type 'unknown'.
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Don't use optional</h2>
+            <pre><code data-trim class="typescript">
+function TopComponent() {
+    const myfn = (now?:date) => console.log('it is now', now);
+	return &lt;BottomComponent onclick={myfn} />
+}
+
+function BottomComponent({onclick}: {onclick: () => void}) {
+	return &lt;button onclick={onclick} >TEST</button>
+                }
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>use literal type</h2>
+            <pre><code data-trim class="typescript">
+            interface User {
+                id: string;
+                role: 'admin' | 'superadmin'
+            }
+            </code></pre>
+            // TODO example avec un boolean
+
+
+        </section>
+
+        <section>
+            <h2>Union type</h2>
+            <pre><code data-trim class="typescript">
+                  type TsConfig = { strictNullChecks: boolean, exactOptionalPropertyTypes: false }
+                                | { strictNullChecks: true, exactOptionalPropertyTypes: true }
+
+              </code></pre>
+
+            <pre><code data-trim class="typescript">
+                  type Admin = { id:string, kind: 'admin' };
+                  type SuperAdmin = { id:string, kind: 'superadmin', age: number };
+                  type User = Admin | SuperAdmin
+              </code></pre>
+        </section>
+
+
+        <section>
+            <h2>type guard</h2>
+            <pre><code data-trim class="typescript">
+                  type Admin = { id:string, kind: 'admin' };
+                  type SuperAdmin = { id:string, kind: 'superadmin', age: number };
+                  type User = Admin | SuperAdmin
+
+
+                function getAge(user: User): number | null {
+                /*
+                Property 'age' does not exist on type 'User'.   Property 'age' does not exist on type 'Admin'.
+                return user.age
+                */
+                    if (user.kind === 'superadmin') {
+                          return user.age;
+                    } else {
+                        return null;
+                    }
+                }
+
+              </code></pre>
+
+        </section>
+
+        <section>
+            <h2>never / cannotHappen</h2>
+
+            <pre><code data-trim class="typescript">
+                  type Admin = { id:string, kind: 'admin' };
+                  type SuperAdmin = { id:string, kind: 'superadmin', age: number };
+                  type User = Admin | SuperAdmin
+
+                function cannotHappen(x: never): never {
+                    throw new Error(`${x} is not a valid value`);
+                }
+
+                function getAge(user: User): number | null {
+                    if (user.kind === 'superadmin') {
+                          return user.age;
+                    } else if(user.kind === 'admin') {
+                        return null;
+                    } else {
+                        cannotHappen(user);
+                    }
+                }
+
+              </code></pre>
+        </section>
+
+        <section>
+            <h2>never / cannotHappen</h2>
+
+            <pre><code data-trim class="typescript">
+                  type Admin = { id:string, kind: 'admin' };
+                  type SuperAdmin = { id:string, kind: 'superadmin', age: number };
+                  type UltraAdmin = { id:string, kind: 'ultradmin', birthDate: Date };
+                  type User = Admin | SuperAdmin | UltraAdmin
+
+                function cannotHappen(x: never): never {
+                    throw new Error(`${x} is not a valid value`);
+                }
+
+                function getAge(user: User): number | null {
+                    if (user.kind === 'superadmin') {
+                          return user.age;
+                    } else if(user.kind === 'admin') {
+                        return null;
+                    } else {
+                        cannotHappen(user); // Argument of type 'UltraAdmin' is not assignable to parameter of type 'never'.
+                    }
+                }
+              </code></pre>
+        </section>
+
+        <section>
+            <h2>Gérer les erreurs</h2>
+            <p>Les exceptions sont invisibles pour TypeScript</p>
+
+            <pre><code data-trim class="typescript">
+function toNum(e: unknown): number | Error {
+    return typeof e === 'number'?e: new Error(`${e} is not a valid number`)
+}
+            </code></pre>
+
+        </section>
+
+        <section>
+            <h2>Gérer les erreurs</h2>
+            <p>Les exceptions sont invisibles pour TypeScript</p>
+            <ul>
+                <li><code>throw new Error</code> dans les cas qui devraient mener a un crash</li>
+                <li><code>return new Error</code> dans les cas qui doivent être gérer par l'appelant</li>
+            </ul>
+
+            //TODO donner l'exemple typique du backend avec des throws representant des erreurs HTTPs
+        </section>
+
+        <section>
+            Use generics when you can (examples de equals , une seule implem
+            possible)
+        </section>
+
+        <section>
+            * use tag for configuration to differentiate type that are otherwise
+            the same (ie phantom type not so phantomatic)
+        </section>
+
+        <section>
+            * use advanced type Optiinal, Omit, Readonly, `extends`, Mapped type
+        </section>
+
+        <section>Tuple + Named tuple [prout:string, age:number]</section>
+
+        <section>
+            <h2>Conclusion</h2>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+    });
+</script>
+</body>
 </html>
