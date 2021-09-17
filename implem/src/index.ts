@@ -1,3 +1,9 @@
-function getCoordinates(): readonly [latitude:number, longitude:number] {
-  return [1, 2] as const;
+function divide(num:number, denom: number): number | Error {
+  if ( denom === 0 ) {
+    return Error('Cannot divide by 0');
+  }
+  return num / denom;
 }
+
+const result = divide(1,0)
+result + 1;

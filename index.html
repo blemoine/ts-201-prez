@@ -15,12 +15,21 @@
 
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+    <style>
+      code.runtime {
+        border: 2px solid rgb(192, 0, 0);
+      }
+
+      code.compiletime {
+        border: 2px solid rgb(0, 112, 0);
+      }
+    </style>
   </head>
   <body>
     <div class="reveal">
       <div class="slides">
         <section>
-          <h1>TypeScript</h1>
+          <h1>TypeScript 201</h1>
           <h2>Faites du compilateur votre meilleur ami</h2>
 
           <img src="./img/ts_logo.svg" alt="typescript logo" width="250" />
@@ -64,7 +73,7 @@
           <p>Le compilateur et les types doivent nous aider à</p>
           <ul>
             <li class="fragment">
-              Corriger les erreurs a la compilation, et pas au runtime
+              Découvrir les erreurs à la compilation, et pas au runtime
             </li>
             <li class="fragment">maintenir et écrire le code</li>
             <li class="fragment">augmenter notre confiance dans le code</li>
@@ -77,33 +86,18 @@
         </section>
 
         <section>
-          <h2>Règles de base</h2>
-          <h3 class="fragment">
-            le compilateur a raison, <em>vous</em> avez tort&nbsp;!
+          <h2>Règle de base</h2>
+          <h3 class="fragment" style="font-size: 185%">
+            le compilateur a raison,
+          </h3>
+          <h3 class="fragment" style="font-size: 185%">
+            <em style="color: rgb(192, 0, 0)">vous</em> avez tort&nbsp;!
           </h3>
         </section>
 
         <section>
           <h2>Aidez TypeScript à vous aider</h2>
-          <h3>tsconfig.json</h3>
-          <pre><code data-trim class="json">
-{
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "rootDir": "src",
-    "outDir": "dist",
-    "target": "ES2019",
-    "strict": true,
-    "lib": ["es2020.string", "ES2019"]
-  }
-}
-
-            </code></pre>
         </section>
-
-        <!-- Autre approche ? -> expose un problem => une solution que le compilateur apporte -->
 
         <section>
           <h2>null/undefined safety</h2>
@@ -114,8 +108,8 @@ function trim(s: string): string {
 }
 trim(null);
               </code></pre>
-          TODO code couleur erreur runtime
-          <pre><code data-trim class="runtime">
+
+          <pre class="fragment"><code data-trim class="runtime text">
 // au runtime
 Cannot read properties of null
               </code></pre>
@@ -123,6 +117,10 @@ Cannot read properties of null
 
         <section>
           <h2>null/undefined safety</h2>
+          <pre><code data-trim class="json">
+                  // in tsconfig.json
+                  "strictNullChecks": "true"
+            </code></pre>
           <pre><code data-trim class="typescript">
 function trim(s: string): string {
   return s.trim();
@@ -130,12 +128,7 @@ function trim(s: string): string {
 trim(null);
              </code></pre>
 
-          <pre><code data-trim class="json">
-                  // in tsconfig.json
-                    "strictNullChecks": "true"
-            </code></pre>
-
-          <pre><code data-trim class="json" class="compiletime">
+          <pre class="fragment"><code data-trim class="text compiletime">
 Argument of type 'null' is not assignable
               to parameter of type 'string'.
 
@@ -153,7 +146,7 @@ function trimStart(s: string | null): string {
 trimStart(null);
             </code></pre>
 
-          <pre><code data-trim class="compiletime">
+          <pre class="fragment"><code data-trim class="compiletime text">
 Property 'trimStart' does not exist on type 'string'.
 Do you need to change your target library?
 Try changing the 'lib' compiler option to 'es2019' or later.
@@ -165,18 +158,18 @@ return s?.trimStart() || '';
 
         <section>
           <h2>function/method support</h2>
+          <pre><code data-trim class="json">
+// in tsconfig.json
+"lib": ["es2019"]
+            </code></pre>
           <pre><code data-trim class="typescript">
 function trimStart(s: string | null): string {
   return s?.trimStart() || '';
 }
 trimStart(null);
             </code></pre>
-          <pre><code data-trim class="json">
-// in tsconfig.json
-"lib": ["es2019"]
-            </code></pre>
 
-          <pre><code data-trim class="javascript">
+          <pre class="fragment"><code data-trim class="javascript">
 // Compilation result
 function trimStart(s) {
     return (s === null || s === void 0 ?
@@ -189,19 +182,19 @@ trimStart(null);
 
         <section>
           <h2>syntax support</h2>
+          <pre><code data-trim class="json">
+            // in tsconfig.json
+            "target": "es2020",
+            "lib": ["es2019"]
+            </code></pre>
           <pre><code data-trim class="typescript">
 function trimStart(s: string | null): string {
   return s?.trimStart() || '';
 }
 trimStart(null);
             </code></pre>
-          <pre><code data-trim class="json">
-            // in tsconfig.json
-            "target": "es2020",
-            "lib": ["es2019"]
-            </code></pre>
 
-          <pre><code data-trim class="javascript">
+          <pre class="fragment"><code data-trim class="javascript">
 // Compilation result
 function trimStart(s) {
     return s?.trimStart() || '';
@@ -211,35 +204,34 @@ trimStart(null);
         </section>
 
         <section>
-          <h2>implicit any</h2>
+          <h2>implicit <code>any</code></h2>
           <pre><code data-trim class="typescript">
 function trimStart(s) {
-  return s?.trimStart() || '';
+  return s.trimStart();
 }
 trimStart(1);
             </code></pre>
 
-          <pre><code data-trim class="runtime">
+          <pre class="fragment"><code data-trim class="runtime text">
               // runtime
               s?.trimStart is not a function
           </code></pre>
         </section>
 
         <section>
-          <h2>implicit any</h2>
-          <pre><code data-trim class="typescript">
-function trimStart(s) {
-  return s?.trimStart() || '';
-}
-trimStart(1);
-            </code></pre>
+          <h2>implicit <code>any</code></h2>
           <pre><code data-trim class="json">
             // in tsconfig.json
             "noImplicitAny": "true"
                     </code></pre>
+          <pre><code data-trim class="typescript">
+function trimStart(s) {
+  return s.trimStart();
+}
+trimStart(1);
+            </code></pre>
 
-          <pre><code data-trim class="compiletime">
-// At compile time
+          <pre class="fragment"><code data-trim class="compiletime text">
 Parameter 's' implicitly has an 'any' type.
 
 function trimStart(s): string {
@@ -248,40 +240,54 @@ function trimStart(s): string {
         </section>
 
         <section>
-          <h2>explicit any</h2>
+          <h2>explicit <code>any</code></h2>
           <pre><code data-trim class="typescript">
 function trimStart(s: any) {
-  return s?.trimStart() || '';
+  return s.trimStart();
 }
 trimStart(1);
             </code></pre>
 
-          <pre><code data-trim class="runtime">
+          <pre class="fragment"><code data-trim class="runtime text">
               // runtime
-              s?.trimStart is not a function
+              s.trimStart is not a function
           </code></pre>
         </section>
 
         <section>
-          <h2>don't use any</h2>
+          <h2>N'utilisez pas <code>any</code></h2>
           <pre><code data-trim class="typescript">
-function trimStart(s: string | null): string {
-  return s?.trimStart() || '';
+function trimStart(s: string): string {
+  return s.trimStart();
 }
 trimStart(1);
             </code></pre>
 
-          <pre><code data-trim class="compiletime">
-// At compile time
+          <pre><code data-trim class="compiletime text">
 Argument of type '1' is not assignable
-  to parameter of type 'string | null'.
+  to parameter of type 'string'.
           </code></pre>
         </section>
 
         <section>
-          <h2>Typez explicitement ce qui est publique/exporté</h2>
+          <h2>Utilisez <code>unknown</code></h2>
+          <pre><code data-trim class="typescript">
+function trimStart(s: unknown): string {
+  if (typeof s === 'string') {
+    return s.trimStart();
+  } else {
+    return ''
+  }
+}
+trimStart(1);
+            </code></pre>
+        </section>
+
+        <section>
+          <h2>Typez explicitement</h2>
+          <h3>ce qui est publique/exporté</h3>
           <div class="fragment">
-            <h3>Utilisez eslint-typescript</h3>
+            <h3>Utilisez typescript-eslint</h3>
 
             <a
               href="https://github.com/typescript-eslint/typescript-eslint"
@@ -302,7 +308,7 @@ function test(a: string, b?: string): string {
 test("one"); // return one;
 test("one", "two"); // return two;
             </code></pre>
-          <pre><code data-trim class="typescript">
+          <pre class="fragment"><code data-trim class="typescript">
 // I need to do a change
 function test(a: string, c:string, b?: string): string {
    return b ?? (a + c);
@@ -322,22 +328,60 @@ test("one", "two"); // compile fines, but returns "one-two"
        }
 
        function BottomComponent({onclick}: {onclick: () => void}) {
-           return &lt;button onclick={onclick}>TEST&lt;/button>
+           return &lt;button onClick={onclick}>TEST&lt;/button>
        }
                </code></pre>
 
-          // TODO display l'erreur qui arrive
+          <pre><code data-trim class="runtime text">
+              it is now SyntheticBaseEvent {
+                _reactName: 'onClick', _targetInst: null, type: 'click',
+                nativeEvent: PointerEvent, target: button, …}
+          </code></pre>
         </section>
 
         <section>
-          <h2>Modeliser avec les types le plus précis possible</h2>
-
-          Make invalid state impossible to represent
+          <h2>strict</h2>
+          <pre><code data-trim class="json">
+                "strict": "true"
+            </code></pre>
         </section>
 
         <section>
-          <h2>use literal type</h2>
-          <h3>Protect from invalid values</h3>
+          <h2>Changer la configuration d'un projet existant&nbsp;?</h2>
+          <ul>
+            <li>
+              Projet utilisant un compilateur sans typechecking (babel, swc,
+              etc.)
+            </li>
+            <li>
+              Projet existant avec de nombreux fichiers possiblement pleins
+              d'erreurs
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Changer la configuration d'un projet existant&nbsp;!</h2>
+
+          <ul>
+            <li>Créer un fichier tsconfig avec les règles stricts</li>
+            <li>Utiliser cette conf comme linter</li>
+            <li>
+              Ajouter les fichiers un par un jusqu'a avoir couvert tout le
+              projet
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Modéliser avec les types le plus précis possible</h2>
+          <h3 class="fragment">
+            Les états invalides devraient être impossible à représenter
+          </h3>
+        </section>
+
+        <section>
+          <h2>Les types literaux</h2>
           <pre><code data-trim class="typescript">
 interface User {
     id: string;
@@ -347,14 +391,13 @@ interface User {
 const user: User = { id:'1', role: 'ADMIN' };
               </code></pre>
 
-          <pre><code data-trim class="compiletime">
+          <pre><code data-trim class="compiletime text" style="font-size: 92%">
                   Type '"ADMIN"' is not assignable to type '"admin" | "superadmin"'.
               </code></pre>
         </section>
 
         <section>
-          <h2>use literal type</h2>
-          <h3>Protect from invalid values</h3>
+          <h2>Les types literaux</h2>
           <pre><code data-trim class="typescript">
 interface Beer {
     name: string;
@@ -364,224 +407,159 @@ interface Beer {
 const beer: Beer = { name:'westvleteren', sizeInMl: 500 };
               </code></pre>
 
-          <pre><code data-trim class="compiletime">
+          <pre><code data-trim class="compiletime text">
                    Type '500' is not assignable to type '250 | 330 | 475'.
               </code></pre>
         </section>
 
         <section>
-          <h2>Union type</h2>
+          <h2>les types Union</h2>
           <pre><code data-trim class="typescript">
-type BottledBeer = {
-  sizeInMl: 250;
-  material: "glass";
-};
-type CannedBeer = {
-  sizeInMl: 330 | 475;
-  material: "aluminium";
-  canColor: "blue" | "red";
-};
-type Beer = BottledBeer | CannedBeer;
+type BeerBottle = { sizeInMl: 250;  material: "glass"; };
+type BeerCan = { sizeInMl: 330 | 475; material: "aluminium";};
+type Beer = BeerBottle | BeerCan;
 
-const beer: Beer = { material: "aluminium", sizeInMl: 250, canColor: "red" };
+const beer: Beer = {
+  material: "aluminium",
+  sizeInMl: 250,
+};
             </code></pre>
 
-          <pre><code data-trim class="compiletime">
- Type '{ material: "aluminium"; sizeInMl: 250; canColor: "red"; }' is not assignable to type 'Beer'.
-  Type '{ material: "aluminium"; sizeInMl: 250; canColor: "red"; }' is not assignable to type 'CannedBeer'.
+          <pre><code data-trim class="compiletime text" style="font-size: 90%">
+Type '{ material: "aluminium"; sizeInMl: 250; }'
+              is not assignable to type 'Beer'.
+  Type '{ material: "aluminium"; sizeInMl: 250; }'
+              is not assignable to type 'BeerCan'.
     Types of property 'sizeInMl' are incompatible.
       Type '250' is not assignable to type '330 | 475'.
 
-const beer: Beer = { material: "aluminium", sizeInMl: 250, canColor: "red" };
-
-
+const beer: Beer = {
+      ~~~~
             </code></pre>
         </section>
 
         <section>
           <h2>type guard</h2>
 
-          <pre><code data-trim class="typescript">
-type BottledBeer = { sizeInMl: 250, material: 'glass', glassColor: 'transparent' | 'brown' }
-type CannedBeer = { sizeInMl: 330 | 475, material: 'aluminium' }
-type Beer = BottledBeer | CannedBeer
+          <pre><code data-trim class="typescript" style="font-size: 95%">
+type BeerBottle = {material: "glass"};
+type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type Beer = BeerBottle | BeerCan;
 
-function getColor(beer: Beer): 'blue' | 'red' | 'brown' {
-    return beer.canColor || 'brown';
+function getColor(beer: Beer): "blue" | "red" | "transparent" {
+  return beer.material === "aluminium" ?
+           beer.canColor :
+           "transparent";
 }
+
           </code></pre>
-
-          <pre><code data-trim class="compiletime">
-Property 'canColor' does not exist on type 'Beer'.
-  Property 'canColor' does not exist on type 'BottledBeer'.
-
-     return beer.canColor || 'brown';
-                   ~~~~~~~~
-
-            </code></pre>
         </section>
 
         <section>
           <h2>type guard</h2>
 
-          <pre><code data-trim class="typescript">
-type BottledBeer = { sizeInMl: 250, material: 'glass', glassColor: 'transparent' | 'brown' }
-type CannedBeer = { sizeInMl: 330 | 475, material: 'aluminium' }
-type Beer = BottledBeer | CannedBeer
+          <pre><code data-trim class="typescript" style="font-size: 95%">
+type BeerBottle = {material: "glass"};
+type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type Beer = BeerBottle | BeerCan;
 
-function getColor(beer: Beer): "blue" | "red" | "brown" {
-    return beer.material === "aluminium" ? beer.canColor : "brown";
+function isCannedBeer(beer: Beer): beer is BeerCan {
+  return beer.material === "aluminium";
 }
+
+function getColor(beer: Beer): "blue" | "red" | "transparent" {
+  return isCannedBeer(beer) ? beer.canColor : "transparent";
+}
+
           </code></pre>
         </section>
 
         <section>
-          <h2>type guard</h2>
+          <h2>handling new case</h2>
 
-          <pre><code data-trim class="typescript">
-type BottledBeer = {
-    sizeInMl: 250;
-    material: "glass";
-  };
-  type CannedBeer = {
-    sizeInMl: 330 | 475;
-    material: "aluminium";
-    canColor: "blue" | "red";
-  };
-  type Beer = BottledBeer | CannedBeer;
+          <pre><code data-trim class="typescript" style="max-height: none; font-size: 95%;">
+type BeerBottle = {material: "glass"};
+type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerKeg = {material: "wood"}
 
-   function isCannedBeer(beer: Beer): beer is CannedBeer {
-    return beer.material === "aluminium";
-  }
+type Beer = BeerBottle | BeerCan | BeerKeg;
 
-  function getColor(beer: Beer): "blue" | "red" | "transparent" {
-    return isCannedBeer(beer) ? beer.canColor : "transparent";
-  }
+function isCannedBeer(beer: Beer): beer is BeerCan {
+  return beer.material === "aluminium";
+}
+
+function getColor(beer: Beer): "blue" | "red" | "transparent" {
+  return isCannedBeer(beer) ? beer.canColor : "transparent";
+}
+
+// returns 'transparent' !
+getColor({  material: "wood" })
           </code></pre>
         </section>
 
         <section>
-          <h2>type guard</h2>
+          <h2>handling new case</h2>
 
-          <pre><code data-trim class="typescript">
-type BottledBeer = {
-    sizeInMl: 250;
-    material: "glass";
-  };
-  type CannedBeer = {
-    sizeInMl: 330 | 475;
-    material: "aluminium";
-    canColor: "blue" | "red";
-  };
-  type Keg = { sizeInMl: 5000; material: "aluminium" };
-  type Beer = BottledBeer | CannedBeer | Keg;
+          <pre><code data-trim class="typescript" style="max-height: none;font-size: 95%">
+type BeerBottle = {material: "glass"};
+type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerKeg = {material: "wood"}
+type Beer = BeerBottle | BeerCan | BeerKeg;
 
-   function isCannedBeer(beer: Beer): beer is CannedBeer {
-    return beer.material === "aluminium";
+function getColor(beer: Beer): "blue" | "red" | "transparent" {
+  switch (beer.material) {
+    case "aluminium":
+      return beer.canColor;
+    case "glass":
+      return "transparent"
   }
+}
 
-  function getColor(beer: Beer): "blue" | "red" | "transparent" {
-    return isCannedBeer(beer) ? beer.canColor : "transparent";
-  }
-
-  getColor( {        sizeInMl: 5000; material: "aluminium" } ) // returns 'brown' !
-          </code></pre>
-        </section>
-
-        <section>
-          <h2>type guard</h2>
-
-          <pre><code data-trim class="typescript">
-type BottledBeer = {
-    sizeInMl: 250;
-    material: "glass";
-  };
-  type CannedBeer = {
-    sizeInMl: 330 | 475;
-    material: "aluminium";
-    canColor: "blue" | "red";
-  };
-  type Keg = { sizeInMl: 5000; material: "wood" };
-  type Beer = BottledBeer | CannedBeer | Keg;
-
-  function isCannedBeer(beer: Beer): beer is CannedBeer {
-    return beer.material === "aluminium";
-  }
-
-  function getColor(beer: Beer): "blue" | "red" | "transparent" {
-    switch (beer.material) {
-      case "aluminium":
-        return beer.canColor;
-      case "glass":
-        return "transparent"
-    }
-  }
           </code></pre>
 
-          <pre><code data-trim class="compiletime">
-Function lacks ending return statement and return type does not include 'undefined'.
+          <pre><code data-trim class="compiletime text">
+Function lacks ending return statement and
+              return type does not include 'undefined'.
 
-18   function getColor(beer: Beer): "blue" | "red" | "transparent" {
-
+function getColor(beer: Beer): "blue" | "red" | "transparent" {
               </code></pre>
         </section>
 
         <section>
           <h2>never/cannotHappen</h2>
-          <pre><code data-trim class="typescript">
-                namespace Prout {
-  type BottledBeer = {
-    sizeInMl: 250;
-    material: "glass";
-  };
-  type CannedBeer = {
-    sizeInMl: 330 | 475;
-    material: "aluminium";
-    canColor: "blue" | "red";
-  };
-  type Keg = { sizeInMl: 5000; material: "wood" };
-  type Beer = BottledBeer | CannedBeer | Keg;
 
-  function isCannedBeer(beer: Beer): beer is CannedBeer {
-    return beer.material === "aluminium";
-  }
+          <pre><code data-trim class="typescript" style="max-height: none; font-size: 95%;">
+type BeerBottle = {material: "glass"};
+type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerKeg = {material: "wood"}
+type Beer = BeerBottle | BeerCan | BeerKeg;
 
-  function cannotHappen(x: never): never {
-    throw new Error(`${x} is not valid value`);
-  }
-
-  function getColor(beer: Beer): "blue" | "red" | "transparent" {
-    switch (beer.material) {
-      case "aluminium":
-        return beer.canColor;
-      case "glass":
-        return "transparent"
-      default:
-        cannotHappen(beer);
-    }
+function cannotHappen(x: never): never {
+  throw new Error(`${x} is not valid value`);
+}
+function getColor(beer: Beer): "blue" | "red" | "transparent" {
+  switch (beer.material) {
+    case "aluminium":
+      return beer.canColor;
+    case "glass":
+      return "transparent"
+    default:
+      cannotHappen(beer);
   }
 }
             </code></pre>
-          <pre><code data-trim class="compiletime">
-Argument of type 'Keg' is not assignable to parameter of type 'never'.
-
-  cannotHappen(beer);
-               ~~~~
-
+          <pre><code data-trim class="compiletime text">
+Argument of type 'BeerKeg' is not
+              assignable to parameter of type 'never'.
             </code></pre>
         </section>
 
         <section>
-          <h2>Precise type signature</h2>
-          <pre><code data-trim class="typescript">
-    interface User {
-  id: string;
-  name: string;
-}
-interface Company {
-  id: string;
-  address: string;
-}
+          <h2>Avoir des signatures précises</h2>
+          <pre><code data-trim class="typescript" style="max-height: none;">
+interface User {  id: string;  name: string; }
+interface Company {  id: string;  address: string; }
+
 type UserWithEmail = User & { email: string };
 type CompanyWithEmail = Company & { email: string };
 function addEmail(
@@ -591,21 +569,17 @@ function addEmail(
 }
 
 const user: User = {id:'1', name:'Georges'};
-const result = addEmail(user); // result is UserWithEmail | CompanyWithEmail
+// result is UserWithEmail | CompanyWithEmail
+const result = addEmail(user);
 </code></pre>
         </section>
 
         <section>
-          <h2>Precise type signature</h2>
-          <pre><code data-trim class="typescript">
-interface User {
-  id: string;
-  name: string;
-}
-interface Company {
-  id: string;
-  address: string;
-}
+          <h2>Avoir des signatures précises</h2>
+          <pre><code data-trim class="typescript" style="max-height: none;">
+interface User {  id: string;  name: string; }
+interface Company {  id: string;  address: string; }
+
 function addEmail&lt;T extends User | Company>(
   userOrCompany: T
 ): T & { email: string } {
@@ -613,7 +587,8 @@ function addEmail&lt;T extends User | Company>(
 }
 
 const user: User = { id: "1", name: "Georges" };
-const result = addEmail(user); // result is User & {email:string}
+// result is User & {email:string}
+const result = addEmail(user);
 </code></pre>
         </section>
 
@@ -623,7 +598,9 @@ const result = addEmail(user); // result is User & {email:string}
 function getLength(str: string | null): number | null {
   return str === null ? null : str.length;
 }
-const result = getLength(null) // result is of type number | null
+
+// result is of type number | null
+const result = getLength(null)
 </code></pre>
         </section>
 
@@ -635,8 +612,8 @@ function getLength(str: string): number;
 function getLength(str: string | null): number | null {
   return str === null ? null : str.length;
 }
-const result = getLength(null); // result is of type null
-const result1 = getLength('test'); // result1 is of type number
+const res = getLength(null); // res is of type null
+const res1 = getLength('test'); // res1 is of type number
 </code></pre>
         </section>
 
@@ -652,12 +629,13 @@ const beer = { name: 'pabs', sizeInMl: 250};
 const beer2: Beer = beer;
 </code></pre>
 
-          <pre><code data-trim class="compiletime">
- Type '{ name: string; sizeInMl: number; }' is not assignable to type 'Beer'.
+          <pre><code data-trim class="compiletime text" style="font-size: 95%">
+ Type '{ name: string; sizeInMl: number; }'
+              is not assignable to type 'Beer'.
   Types of property 'sizeInMl' are incompatible.
     Type 'number' is not assignable to type '250 | 330 | 475'.
 
-7 const beer2: Beer = beer;
+const beer2: Beer = beer;
 
           </code></pre>
         </section>
@@ -676,7 +654,7 @@ const beer2: Beer = beer;
           <pre class="fragment"><code data-trim class="typescript">
 beer.name = 'molson';
 </code></pre>
-          <pre class="fragment"><code data-trim class="compiletime">
+          <pre class="fragment"><code data-trim class="compiletime text">
 Cannot assign to 'name' because it is a read-only property.
 
 beer.name = 'molson';
@@ -685,51 +663,85 @@ beer.name = 'molson';
         </section>
 
         <section>
-          <h2>named tuple</h2>
+          <h2>Tuple annoté</h2>
           <pre><code data-trim class="typescript">
 function getCoordinates(): readonly [number, number] {
   return [1, 2] as const;
 }
             </code></pre>
           <pre class="fragment"><code data-trim class="typescript">
-function getCoordinates(): readonly [latitude:number, longitude:number] {
+function getCoordinates(
+   ): readonly [latitude:number, longitude:number] {
   return [1, 2] as const;
 }
             </code></pre>
         </section>
 
         <section>
-          <h2>strict</h2>
-          <pre><code data-trim class="json">
-                "strict": "true"
+          <h2>Gestion d'erreur</h2>
+          <h3>Typescript est inconscient des erreurs</h3>
+          <pre><code data-trim class="typescript">
+function divide(num:number, denom: number): number {
+  if ( denom === 0 ) {
+    throw new Error('Cannot divide by 0');
+  }
+  return num / denom;
+}
+
+divide(1,0)
+            </code></pre>
+
+          <pre><code data-trim class="runtime text">
+Uncaught Error: Cannot divide by 0
             </code></pre>
         </section>
 
         <section>
-          <h2>Changer la configuration d'un projet existant ?</h2>
+          <h2>Gestion d'erreur</h2>
+          <h3>Typescript est inconscient des erreurs</h3>
+          <pre><code data-trim class="typescript">
+function divide(num:number, denom: number): number | Error {
+  if ( denom === 0 ) {
+    return Error('Cannot divide by 0');
+  }
+  return num / denom;
+}
+
+const result = divide(1,0)
+result + 1;
+            </code></pre>
+
+          <pre><code data-trim class="compiletime text">
+Operator '+' cannot be applied to
+              types 'number | Error' and 'number'.
+            </code></pre>
+        </section>
+
+        <section>
+          <h2>Gestion d'erreur</h2>
           <ul>
-            <li>
-              Projet utilisant un compilateur sans typechecking (babel, swc,
-              etc.)
+            <li class="fragment">
+              <code>throw</code> Erreur si n'est pas récupérable
             </li>
-            <li>
-              Projet existant avec de nombreux fichiers possiblement pleins
-              d'erreurs
+            <li class="fragment">
+              <code>return</code> Erreur si on veut que l'appelant gère l'erreur
             </li>
           </ul>
         </section>
 
         <section>
-          <h2>Changer la configuration d'un projet existant !</h2>
+          <h2>Gestion d'erreur avancé</h2>
+          <h3>
+            Regarder le pattern <code>Either</code> <br />(aka
+            <code>Result</code>)
+          </h3>
 
-          <ul>
-            <li>Créer un fichier tsconfig avec les règles stricts</li>
-            <li>Utiliser cette conf comme linter</li>
-            <li>
-              Ajouter les fichiers un par un jusqu'a avoir couvert tout le
-              projet
-            </li>
-          </ul>
+          <p>
+            eg. fp-ts
+            <a href="https://gcanti.github.io/fp-ts/modules/Either.ts.html"
+              >https://gcanti.github.io/fp-ts/modules/Either.ts.html</a
+            >
+          </p>
         </section>
 
         <section>
@@ -737,7 +749,7 @@ function getCoordinates(): readonly [latitude:number, longitude:number] {
           <ul>
             <li class="fragment">
               Ne mentez pas au compilateur&nbsp;! (ie. pas de cast, pas de
-              conversion sans validation, pas de any, etc.)
+              conversion sans validation, pas de <code>any</code>, etc.)
             </li>
             <li class="fragment">
               Plus vous serez précis dans vos types, plus le compilateur pourra
