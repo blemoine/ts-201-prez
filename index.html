@@ -344,6 +344,19 @@ test("one", "two"); // compile fines, but returns "one-two"
           </code></pre>
         </section>
 
+          <section>
+              <h2>Optional in mocks</h2>
+              <pre><code data-trim class="typescript">
+type User = { id:string, name:string, age:number };
+function mockUser(u: Partial&lt;User>): User {
+  return { id: '1', name: 'JJ', age: 3 , ...u }
+}
+
+const fakeUser1 = mockUser();
+const fakeUser2 = mockUser({id: '12'});
+              </code></pre>
+          </section>
+
         <section>
           <h2>strict</h2>
           <pre><code data-trim class="json">
@@ -369,8 +382,8 @@ test("one", "two"); // compile fines, but returns "one-two"
           <h2>Changer la configuration d'un projet existant&nbsp;!</h2>
 
           <ul>
-            <li>Créer un fichier tsconfig avec les règles stricts</li>
-            <li>Utiliser cette conf comme linter</li>
+              <li>Créer un fichier <code>tsconfig.json</code> avec les règles stricts</li>
+            <li>Utiliser cette conf comme linter <code>tsc --noEmit</code></li>
             <li>
               Ajouter les fichiers un par un jusqu'a avoir couvert tout le
               projet
@@ -409,7 +422,7 @@ interface Beer {
     sizeInMl: 250 | 330 | 475
 }
 
-const beer: Beer = { name:'westvleteren', sizeInMl: 500 };
+const beer: Beer = { name: 'westvleteren', sizeInMl: 500 };
               </code></pre>
 
           <pre><code data-trim class="compiletime text">
@@ -448,12 +461,12 @@ const beer: Beer = {
 
           <pre><code data-trim class="typescript" style="font-size: 95%">
 type BeerBottle = {material: "glass"};
-type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerCan = {material: "aluminium"; color: "blue" | "red"};
 type Beer = BeerBottle | BeerCan;
 
 function getColor(beer: Beer): "blue" | "red" | "transparent" {
   return beer.material === "aluminium" ?
-           beer.canColor :
+           beer.color :
            "transparent";
 }
 
@@ -465,7 +478,7 @@ function getColor(beer: Beer): "blue" | "red" | "transparent" {
 
           <pre><code data-trim class="typescript" style="font-size: 95%">
 type BeerBottle = {material: "glass"};
-type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerCan = {material: "aluminium"; color: "blue" | "red"};
 type Beer = BeerBottle | BeerCan;
 
 function isCannedBeer(beer: Beer): beer is BeerCan {
@@ -473,7 +486,7 @@ function isCannedBeer(beer: Beer): beer is BeerCan {
 }
 
 function getColor(beer: Beer): "blue" | "red" | "transparent" {
-  return isCannedBeer(beer) ? beer.canColor : "transparent";
+  return isCannedBeer(beer) ? beer.color : "transparent";
 }
 
           </code></pre>
@@ -484,7 +497,7 @@ function getColor(beer: Beer): "blue" | "red" | "transparent" {
 
           <pre><code data-trim class="typescript" style="max-height: none; font-size: 95%;">
 type BeerBottle = {material: "glass"};
-type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerCan = {material: "aluminium"; color: "blue" | "red"};
 type BeerKeg = {material: "wood"}
 
 type Beer = BeerBottle | BeerCan | BeerKeg;
@@ -494,7 +507,7 @@ function isCannedBeer(beer: Beer): beer is BeerCan {
 }
 
 function getColor(beer: Beer): "blue" | "red" | "transparent" {
-  return isCannedBeer(beer) ? beer.canColor : "transparent";
+  return isCannedBeer(beer) ? beer.color : "transparent";
 }
 
 // returns 'transparent' !
@@ -507,14 +520,14 @@ getColor({  material: "wood" })
 
           <pre><code data-trim class="typescript" style="max-height: none;font-size: 95%">
 type BeerBottle = {material: "glass"};
-type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerCan = {material: "aluminium"; color: "blue" | "red"};
 type BeerKeg = {material: "wood"}
 type Beer = BeerBottle | BeerCan | BeerKeg;
 
 function getColor(beer: Beer): "blue" | "red" | "transparent" {
   switch (beer.material) {
     case "aluminium":
-      return beer.canColor;
+      return beer.color;
     case "glass":
       return "transparent"
   }
@@ -535,7 +548,7 @@ function getColor(beer: Beer): "blue" | "red" | "transparent" {
 
           <pre><code data-trim class="typescript" style="max-height: none; font-size: 95%;">
 type BeerBottle = {material: "glass"};
-type BeerCan = {material: "aluminium"; canColor: "blue" | "red"};
+type BeerCan = {material: "aluminium"; color: "blue" | "red"};
 type BeerKeg = {material: "wood"}
 type Beer = BeerBottle | BeerCan | BeerKeg;
 
@@ -545,7 +558,7 @@ function cannotHappen(x: never): never {
 function getColor(beer: Beer): "blue" | "red" | "transparent" {
   switch (beer.material) {
     case "aluminium":
-      return beer.canColor;
+      return beer.color;
     case "glass":
       return "transparent"
     default:
