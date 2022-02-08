@@ -255,7 +255,7 @@ trimStart(1);
 
           <pre class="fragment"><code data-trim class="runtime text">
               // runtime
-              s.trimStart is not a function
+              s?.trimStart is not a function
           </code></pre>
         </section>
 
@@ -287,6 +287,41 @@ function trimStart(s: unknown): string {
 trimStart(1);
             </code></pre>
         </section>
+
+        <section>
+          <h2>strict</h2>
+          <pre><code data-trim class="json">
+                "strict": "true"
+            </code></pre>
+        </section>
+
+
+          <section>
+              <h2>Changer la configuration d'un projet existant&nbsp;?</h2>
+              <ul>
+                  <li>
+                      Projet utilisant un compilateur sans typechecking (babel, swc,
+                      etc.)
+                  </li>
+                  <li>
+                      Projet existant avec de nombreux fichiers possiblement pleins
+                      d'erreurs
+                  </li>
+              </ul>
+          </section>
+
+          <section>
+              <h2>Changer la configuration d'un projet existant&nbsp;!</h2>
+
+              <ul>
+                  <li>Créer un fichier <code>tsconfig.json</code> avec les règles stricts</li>
+                  <li>Utiliser cette conf comme linter <code>tsc --noEmit</code></li>
+                  <li>
+                      Ajouter les fichiers un par un jusqu'a avoir couvert tout le
+                      projet
+                  </li>
+              </ul>
+          </section>
 
         <section>
           <h2>Typez explicitement</h2>
@@ -348,7 +383,7 @@ test("one", "two"); // compile fines, but returns "one-two"
               <h2>Optional in mocks</h2>
               <pre><code data-trim class="typescript">
 type User = { id:string, name:string, age:number };
-function mockUser(u: Partial&lt;User>): User {
+function mockUser(u?: Partial&lt;User>): User {
   return { id: '1', name: 'JJ', age: 3 , ...u }
 }
 
@@ -357,39 +392,7 @@ const fakeUser2 = mockUser({id: '12'});
               </code></pre>
           </section>
 
-        <section>
-          <h2>strict</h2>
-          <pre><code data-trim class="json">
-                "strict": "true"
-            </code></pre>
-        </section>
 
-        <section>
-          <h2>Changer la configuration d'un projet existant&nbsp;?</h2>
-          <ul>
-            <li>
-              Projet utilisant un compilateur sans typechecking (babel, swc,
-              etc.)
-            </li>
-            <li>
-              Projet existant avec de nombreux fichiers possiblement pleins
-              d'erreurs
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Changer la configuration d'un projet existant&nbsp;!</h2>
-
-          <ul>
-              <li>Créer un fichier <code>tsconfig.json</code> avec les règles stricts</li>
-            <li>Utiliser cette conf comme linter <code>tsc --noEmit</code></li>
-            <li>
-              Ajouter les fichiers un par un jusqu'a avoir couvert tout le
-              projet
-            </li>
-          </ul>
-        </section>
 
         <section>
           <h2>Modéliser avec les types le plus précis possible</h2>
@@ -720,7 +723,7 @@ Uncaught Error: Cannot divide by 0
           <pre><code data-trim class="typescript">
 function divide(num:number, denom: number): number | Error {
   if ( denom === 0 ) {
-    return Error('Cannot divide by 0');
+    return new Error('Cannot divide by 0');
   }
   return num / denom;
 }
